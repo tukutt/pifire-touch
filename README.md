@@ -59,25 +59,43 @@ You can test the UI on your desktop Linux environment:
 ./scripts/run_desktop.sh
 ```
 
-### Running on Raspberry Pi (Touchscreen)
+### Deployment & Running on Raspberry Pi
 
-**First-time Setup:**
-Run the setup script to install system dependencies for Qt6 and configure permissions (requires sudo):
+**1. Deploy from Desktop:**
+Use the deployment script to copy files to your Raspberry Pi.
 ```bash
-chmod +x scripts/setup_remote.sh scripts/run_remote.sh
-./scripts/setup_remote.sh
-```
-*Note: You may need to reboot after this step.*
+# Default (defaults to pifire.local)
+./scripts/deploy.sh
 
-**Start the Application:**
+# Or specify IP
+./scripts/deploy.sh 192.168.1.50
+```
+
+**2. First-time Setup on Pi:**
+SSH into your Pi and run the setup scripts.
+
+*Install Python Environment (Dependencies):*
+```bash
+/home/pi/pifire-touch/scripts/install_venv.sh
+```
+
+*Install System Dependencies (Qt6/OpenGL & Permissions):*
+```bash
+/home/pi/pifire-touch/scripts/setup_remote.sh
+```
+*Note: You may need to reboot after this setup step.*
+
+**3. Start the Application:**
 To launch the interface in full-screen (framebuffer) mode:
 ```bash
-./scripts/run_remote.sh
+/home/pi/pifire-touch/scripts/run_remote.sh
 ```
-This script handles:
--   Hiding the mouse cursor.
--   Setting up the Qt platform backend (`linuxfb` or `eglfs`).
--   Cleaning up the framebuffer on exit.
+
+**4. Stop the Application:**
+To kill running instances:
+```bash
+/home/pi/pifire-touch/scripts/kill_remote.sh
+```
 
 ## 📝 ToDo
 - [ ] Pellet management
