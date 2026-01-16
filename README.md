@@ -2,6 +2,11 @@
 
 **PiFire Touch** is a modern, touch-friendly graphical user interface for [PiFire](https://github.com/nebhead/PiFire), designed to run directly on a Raspberry Pi with a touch display. It leverages Qt6 (PySide6) and QML to provide a seamless, responsive, and aesthetically pleasing experience.
 
+![PiFire Touch Dashboard](docs/screenshots/dashboard_preview.png)
+
+<video src="docs/screenshots/screenrecording-2026-01-17_00-53-57.mp4" controls title="Demo Video"></video>
+
+
 ## ✨ Features
 
 -   **Material Design UI**: Sleek, dark-mode interface built with Qt Quick Controls 2 (Material style).
