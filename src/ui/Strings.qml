@@ -2,7 +2,7 @@ import QtQuick 2.15
 
 QtObject {
     id: strings
-    property string language: "fr" 
+    property string language: "en" 
     
     // Bind to the dynamic dictionary from Bridge
     property var db: bridge.langData 

@@ -69,7 +69,9 @@ class PiFireBridge(QObject):
         
         # I18n Init
         self._lang_data = {}
-        self.load_language("fr")
+        self._lang_data = {}
+        self._language = "en"
+        # self.load_language("en") # Moved to load_config to respect persistence
 
         # New HTTPS URL configuration
         # Default configuration
@@ -208,7 +210,9 @@ class PiFireBridge(QObject):
 
     @Slot(str, result=None)
     def setLanguage(self, lang_code):
+        self._language = lang_code
         self.load_language(lang_code)
+        self.save_config()
 
     # --- Server Configuration ---
 
@@ -239,13 +243,16 @@ class PiFireBridge(QObject):
                     data = json.load(f)
                     self._server_selection = data.get('server_selection', 'pifire')
                     self._custom_ip = data.get('custom_ip', '')
-                    print(f"Bridge: Config Loaded. Mode: {self._server_selection}, IP: {self._custom_ip}")
+                    self._language = data.get('language', 'en')
+                    print(f"Bridge: Config Loaded. Mode: {self._server_selection}, IP: {self._custom_ip}, Lang: {self._language}")
             else:
                  print("Bridge: No config file found. Using defaults.")
         except Exception as e:
             print(f"Bridge: Error loading config: {e}")
             
         self.update_base_url()
+        # Ensure language is loaded after config
+        self.load_language(self._language)
 
     def save_config(self):
         try:
@@ -253,7 +260,8 @@ class PiFireBridge(QObject):
             path = os.path.join(current_dir, "config.json")
             data = {
                 'server_selection': self._server_selection,
-                'custom_ip': self._custom_ip
+                'custom_ip': self._custom_ip,
+                'language': self._language
             }
             with open(path, 'w') as f:
                 json.dump(data, f)
