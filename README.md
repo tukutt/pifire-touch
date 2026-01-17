@@ -4,7 +4,7 @@
 
 ![PiFire Touch Dashboard](docs/screenshots/dashboard_preview.png)
 
-<video src="docs/screenshots/screenrecording-2026-01-17_00-53-57.mp4" controls title="Demo Video"></video>
+![PiFire Touch Demo](docs/screenshots/dashboard_demo.gif)
 
 
 ## ✨ Features
@@ -109,7 +109,7 @@ To kill running instances:
 - [ ] Alarm on probe
 - [ ] A better History graph
 - [ ] Some Settings
-- [ ] Maybe your idea :)
+- [ ] Your idea :)
 
 
 ## 📄 License
