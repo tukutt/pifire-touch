@@ -84,11 +84,11 @@ SSH into your Pi and run the setup scripts.
 /home/pi/pifire-touch/scripts/install_venv.sh
 ```
 
-*Install System Dependencies (Qt6/OpenGL & Permissions):*
+*Install System Dependencies (Qt6/OpenGL/Cage & Permissions):*
 ```bash
 /home/pi/pifire-touch/scripts/setup_remote.sh
 ```
-*Note: You may need to reboot after this setup step.*
+*Note: A REBOOT is required for Cage/Wayland backend to function correctly.*
 
 **3. Start the Application:**
 To launch the interface in full-screen (framebuffer) mode:

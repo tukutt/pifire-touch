@@ -13,7 +13,8 @@ sudo apt-get install -y \
   libxcb-render-util0 libxcb-render0 libxcb-shape0 libxcb-sync1 libxcb-xfixes0 \
   libxcb-xinerama0 libxcb-xkb1 libxcb1 \
   libx11-xcb1 libdbus-1-3 libfontconfig1 \
-  libgles2 libegl1
+  libgles2 libegl1 \
+  cage qt6-wayland
 
 # 2. Fix Permissions
 echo "--> Adding user 'pi' to video/render groups..."
@@ -28,15 +29,26 @@ sudo chmod 660 /dev/tty0
 sudo chgrp tty /dev/tty0
 
 # 3. Check GPU Driver (KMS)
-echo "--> Checking /boot/config.txt for KMS..."
-if grep -q "dtoverlay=vc4-kms-v3d" /boot/config.txt; then
-    echo " [OK] KMS overlay found."
-elif grep -q "dtoverlay=vc4-fkms-v3d" /boot/config.txt; then
-    echo " [WARN] Fake KMS (fkms) found. Full KMS (kms) is recommended for Qt6."
-else
-    echo " [ERR] No KMS overlay found in /boot/config.txt!"
-    echo "       Please enable it by adding: dtoverlay=vc4-kms-v3d"
+echo "--> Checking config.txt for KMS..."
+CONFIG_FILE="/boot/config.txt"
+if [ -f "/boot/firmware/config.txt" ]; then
+    CONFIG_FILE="/boot/firmware/config.txt"
 fi
+echo "    Using: $CONFIG_FILE"
+
+if grep -q "dtoverlay=vc4-kms-v3d" "$CONFIG_FILE"; then
+    echo " [OK] KMS overlay found."
+elif grep -q "dtoverlay=vc4-fkms-v3d" "$CONFIG_FILE"; then
+    echo " [WARN] Fake KMS (fkms) found. Enabling Full KMS..."
+    sudo sed -i 's/dtoverlay=vc4-fkms-v3d/#dtoverlay=vc4-fkms-v3d/g' "$CONFIG_FILE"
+    echo "dtoverlay=vc4-kms-v3d" | sudo tee -a "$CONFIG_FILE"
+else
+    echo " [ERR] No KMS overlay found! Enabling it..."
+    echo "dtoverlay=vc4-kms-v3d" | sudo tee -a "$CONFIG_FILE"
+fi
+
+# Ensure run_remote works with cage (tty permissions for SSH launch are tricky)
+# We add a handy alias or hint for systemd usage later.
 
 echo "=== Setup Complete ==="
 echo "You may need to REBOOT for permissions/drivers to take effect: sudo reboot"

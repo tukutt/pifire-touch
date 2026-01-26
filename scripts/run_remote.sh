@@ -1,25 +1,31 @@
 #!/bin/bash
 
-# Configuration Framebuffer
+# Configuration Framebuffer (LinuxFB)
 export QT_QPA_PLATFORM=linuxfb:fb=/dev/fb0
+export QT_QPA_FB_HIDDEN_CURSOR=1
 export XDG_RUNTIME_DIR=/run/user/$(id -u)
 
-# --- NOUVEAU : Supprimer les curseurs ---
-
-# 1. Supprimer le curseur de la console (le tiret bas qui clignote)
-# On écrit le code d'échappement magique dans le terminal actuel
+# --- Hide Cursors ---
+# 1. Console cursor (requires TTY write access)
 echo -e "\033[?25l"
+setterm -cursor off 2>/dev/null || true
 
-# 2. Supprimer le curseur de la souris (la flèche), si jamais elle apparaît
-export QT_QPA_FB_HIDDEN_CURSOR=1
+# 2. Mouse cursor (already set via QT_QPA_FB_HIDDEN_CURSOR)
 
 # ----------------------------------------
 
 cd "$(dirname "$0")/.."
 
-echo "Démarrage..."
-# Start Python (without exec, so we can clean up after)
+echo "Démarrage (LinuxFB)..."
+# Start Python
 .venv/bin/python src/main.py
+
+# --- CLEANUP ---
+echo "Nettoyage..."
+
+# Restore Console Cursor
+echo -e "\033[?25h"
+setterm -cursor on 2>/dev/null || true
 
 # --- CLEANUP ---
 echo "Nettoyage..."
